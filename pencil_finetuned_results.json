@@ -1,0 +1,319 @@
+{
+  "method": "finetune_from_homus",
+  "base_model": "../MusicSymbolTrainer/exports/rnn_best.pt",
+  "val_accuracy": 92.45283018867924,
+  "test_accuracy": 94.44444444444444,
+  "best_epoch": 12,
+  "per_class": {
+    "quarter-note-down": {
+      "accuracy": 100.0,
+      "correct": 5,
+      "total": 5
+    },
+    "eighth-note-up": {
+      "accuracy": 100.0,
+      "correct": 5,
+      "total": 5
+    },
+    "eighth-note-down": {
+      "accuracy": 100.0,
+      "correct": 6,
+      "total": 6
+    },
+    "half-note-up": {
+      "accuracy": 100.0,
+      "correct": 1,
+      "total": 1
+    },
+    "half-note-down": {
+      "accuracy": 33.333333333333336,
+      "correct": 1,
+      "total": 3
+    },
+    "whole-note": {
+      "accuracy": 100.0,
+      "correct": 3,
+      "total": 3
+    },
+    "rest-quarter": {
+      "accuracy": 100.0,
+      "correct": 8,
+      "total": 8
+    },
+    "rest-eighth": {
+      "accuracy": 100.0,
+      "correct": 3,
+      "total": 3
+    },
+    "treble-clef": {
+      "accuracy": 100.0,
+      "correct": 1,
+      "total": 1
+    },
+    "sharp": {
+      "accuracy": 83.33333333333333,
+      "correct": 5,
+      "total": 6
+    },
+    "flat": {
+      "accuracy": 100.0,
+      "correct": 5,
+      "total": 5
+    },
+    "natural": {
+      "accuracy": 100.0,
+      "correct": 4,
+      "total": 4
+    },
+    "dot": {
+      "accuracy": 100.0,
+      "correct": 4,
+      "total": 4
+    }
+  },
+  "confusion_matrix": [
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      5,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      5,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      6,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      2,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      3,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      8,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      3,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      5,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      5,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      4,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      4
+    ]
+  ],
+  "parameters": 600846,
+  "num_classes": 14,
+  "input_size": 3,
+  "class_names": [
+    "quarter-note-up",
+    "quarter-note-down",
+    "eighth-note-up",
+    "eighth-note-down",
+    "half-note-up",
+    "half-note-down",
+    "whole-note",
+    "rest-quarter",
+    "rest-eighth",
+    "treble-clef",
+    "sharp",
+    "flat",
+    "natural",
+    "dot"
+  ]
+}
