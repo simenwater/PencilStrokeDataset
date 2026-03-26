@@ -87,17 +87,37 @@ def normalize(points):
 - **num_classes = 15** 不是 32
 - 其他超参保持不变（hidden_size=128, num_layers=2, dropout=0.3）
 
-### 5. 训练
+### 5. 数据划分
+```python
+# 按 80/10/10 划分，打乱顺序，固定种子
+import numpy as np
+np.random.seed(42)
+indices = np.random.permutation(len(samples))
+n = len(indices)
+train = [samples[i] for i in indices[:int(n*0.8)]]   # ~454
+val   = [samples[i] for i in indices[int(n*0.8):int(n*0.9)]]  # ~57
+test  = [samples[i] for i in indices[int(n*0.9):]]   # ~56
+```
+
+### 6. 训练
 - optimizer: AdamW, lr=1e-3
 - epochs: 50
 - batch_size: 32（数据少，batch 小一点）
 - label_smoothing: 0.1
 - 数据增强: 随机缩放 ±15%、随机平移 ±10%、随机旋转 ±10°
+- 每 epoch 打印 train_acc 和 val_acc
+- 保存 val_acc 最高的模型为 pencil_best.pt
 
-### 6. 导出
+### 7. 测试集评估
+训练完后用 test set 评估：
+- 总体 accuracy
+- 每类 accuracy（confusion matrix）
+- 打印最差的 5 个类和它们混淆为什么
+
+### 8. 导出
 训练完后保存:
 - `pencil_best.pt` → 模型权重
-- `pencil_results.json` → 准确率 + confusion matrix
+- `pencil_results.json` → 准确率 + per_class accuracy + confusion matrix
 - push 到 GitHub
 
 ## 目标
