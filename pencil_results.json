@@ -1,35 +1,30 @@
 {
-  "test_accuracy": 91.2280701754386,
+  "test_accuracy": 94.44444444444444,
   "per_class": {
-    "quarter-note-up": {
-      "accuracy": 100.0,
-      "correct": 2,
-      "total": 2
-    },
     "quarter-note-down": {
-      "accuracy": 60.0,
-      "correct": 3,
+      "accuracy": 80.0,
+      "correct": 4,
       "total": 5
     },
     "eighth-note-up": {
       "accuracy": 100.0,
-      "correct": 3,
-      "total": 3
+      "correct": 5,
+      "total": 5
     },
     "eighth-note-down": {
-      "accuracy": 100.0,
-      "correct": 2,
-      "total": 2
+      "accuracy": 83.33333333333333,
+      "correct": 5,
+      "total": 6
     },
     "half-note-up": {
       "accuracy": 100.0,
-      "correct": 3,
-      "total": 3
+      "correct": 1,
+      "total": 1
     },
     "half-note-down": {
       "accuracy": 100.0,
-      "correct": 4,
-      "total": 4
+      "correct": 3,
+      "total": 3
     },
     "whole-note": {
       "accuracy": 100.0,
@@ -38,48 +33,42 @@
     },
     "rest-quarter": {
       "accuracy": 100.0,
-      "correct": 5,
-      "total": 5
+      "correct": 8,
+      "total": 8
     },
     "rest-eighth": {
-      "accuracy": 100.0,
-      "correct": 4,
-      "total": 4
-    },
-    "treble-clef": {
       "accuracy": 100.0,
       "correct": 3,
       "total": 3
     },
+    "treble-clef": {
+      "accuracy": 100.0,
+      "correct": 1,
+      "total": 1
+    },
     "sharp": {
-      "accuracy": 85.71428571428571,
+      "accuracy": 100.0,
       "correct": 6,
-      "total": 7
+      "total": 6
     },
     "flat": {
-      "accuracy": 80.0,
-      "correct": 4,
-      "total": 5
-    },
-    "natural": {
-      "accuracy": 100.0,
-      "correct": 4,
-      "total": 4
-    },
-    "barline-single": {
-      "accuracy": 50.0,
-      "correct": 1,
-      "total": 2
-    },
-    "dot": {
       "accuracy": 100.0,
       "correct": 5,
       "total": 5
+    },
+    "natural": {
+      "accuracy": 75.0,
+      "correct": 3,
+      "total": 4
+    },
+    "dot": {
+      "accuracy": 100.0,
+      "correct": 4,
+      "total": 4
     }
   },
   "confusion_matrix": [
     [
-      2,
       0,
       0,
       0,
@@ -96,98 +85,12 @@
       0
     ],
     [
-      0,
-      3,
-      0,
-      0,
-      0,
-      2,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      3,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      2,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      3,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
       0,
       4,
       0,
       0,
       0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      3,
+      1,
       0,
       0,
       0,
@@ -198,11 +101,6 @@
       0
     ],
     [
-      0,
-      0,
-      0,
-      0,
-      0,
       0,
       0,
       5,
@@ -212,6 +110,74 @@
       0,
       0,
       0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      5,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      3,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      3,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
       0
     ],
     [
@@ -222,8 +188,7 @@
       0,
       0,
       0,
-      0,
-      4,
+      8,
       0,
       0,
       0,
@@ -232,7 +197,6 @@
       0
     ],
     [
-      0,
       0,
       0,
       0,
@@ -257,29 +221,27 @@
       0,
       0,
       0,
+      0,
       1,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
       0,
       6,
       0,
       0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      4,
-      0,
-      0,
       0
     ],
     [
@@ -294,8 +256,7 @@
       0,
       0,
       0,
-      0,
-      4,
+      5,
       0,
       0
     ],
@@ -312,8 +273,7 @@
       0,
       0,
       1,
-      0,
-      1,
+      3,
       0
     ],
     [
@@ -330,11 +290,30 @@
       0,
       0,
       0,
-      0,
-      5
+      4
     ]
   ],
-  "val_accuracy": 96.49122807017544,
-  "best_epoch": 20,
-  "parameters": 602127
+  "val_accuracy": 98.11320754716981,
+  "best_epoch": 26,
+  "parameters": 601870,
+  "num_classes": 14,
+  "excluded": [
+    "barline-single"
+  ],
+  "class_names": [
+    "quarter-note-up",
+    "quarter-note-down",
+    "eighth-note-up",
+    "eighth-note-down",
+    "half-note-up",
+    "half-note-down",
+    "whole-note",
+    "rest-quarter",
+    "rest-eighth",
+    "treble-clef",
+    "sharp",
+    "flat",
+    "natural",
+    "dot"
+  ]
 }

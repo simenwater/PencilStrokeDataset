@@ -1,6 +1,7 @@
 """
 train_pencil.py
-用 iPad Apple Pencil 手写数据训练 15 类笔画序列分类器
+用 iPad Apple Pencil 手写数据训练 14 类笔画序列分类器
+(去掉 barline-single，用规则检测)
 """
 
 import torch
@@ -11,6 +12,16 @@ import numpy as np
 import json
 import time
 import math
+
+# 14 类 (去掉 barline-single)
+CLASS_NAMES = [
+    'quarter-note-up', 'quarter-note-down', 'eighth-note-up', 'eighth-note-down',
+    'half-note-up', 'half-note-down', 'whole-note', 'rest-quarter', 'rest-eighth',
+    'treble-clef', 'sharp', 'flat', 'natural', 'dot'
+]
+
+# 原始 class_id 到新 class_id 的映射 (跳过 13=barline-single)
+OLD_TO_NEW = {0:0, 1:1, 2:2, 3:3, 4:4, 5:5, 6:6, 7:7, 8:8, 9:9, 10:10, 11:11, 12:12, 14:13}
 
 
 class PencilStrokeDataset(Dataset):
@@ -24,7 +35,7 @@ class PencilStrokeDataset(Dataset):
     def __getitem__(self, idx):
         sample = self.samples[idx]
         strokes = sample['strokes']
-        label = sample['class_id']
+        label = OLD_TO_NEW[sample['class_id']]  # 映射到新 ID
 
         points = []
         for stroke in strokes:
@@ -72,7 +83,7 @@ def collate_fn(batch):
 
 
 class StrokeLSTM(nn.Module):
-    def __init__(self, input_size=4, hidden_size=128, num_layers=2, num_classes=15, dropout=0.3):
+    def __init__(self, input_size=4, hidden_size=128, num_layers=2, num_classes=14, dropout=0.3):
         super().__init__()
         self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True,
                             dropout=dropout if num_layers > 1 else 0, bidirectional=True)
@@ -92,8 +103,12 @@ def load_data(data_path='collected/iPad.jsonl'):
     samples = []
     with open(data_path) as f:
         for line in f:
-            samples.append(json.loads(line))
-    print(f"Loaded {len(samples)} samples")
+            s = json.loads(line)
+            # 跳过 barline-single (class_id=13)
+            if s['class_id'] != 13:
+                samples.append(s)
+
+    print(f"Loaded {len(samples)} samples (excluded barline-single)")
 
     np.random.seed(42)
     indices = np.random.permutation(len(samples))
@@ -153,10 +168,6 @@ def train_model(model, train_loader, val_loader, epochs=50, device='cuda', lr=1e
 
 
 def evaluate(model, test_loader, device='cuda'):
-    CLASS_NAMES = ['quarter-note-up', 'quarter-note-down', 'eighth-note-up', 'eighth-note-down',
-                   'half-note-up', 'half-note-down', 'whole-note', 'rest-quarter', 'rest-eighth',
-                   'treble-clef', 'sharp', 'flat', 'natural', 'barline-single', 'dot']
-
     model.eval()
     all_preds, all_labels = [], []
 
@@ -170,21 +181,22 @@ def evaluate(model, test_loader, device='cuda'):
     all_preds, all_labels = np.array(all_preds), np.array(all_labels)
     total_acc = 100. * (all_preds == all_labels).sum() / len(all_labels)
 
-    class_correct, class_total = [0] * 15, [0] * 15
+    num_classes = 14
+    class_correct, class_total = [0] * num_classes, [0] * num_classes
     for pred, label in zip(all_preds, all_labels):
         class_total[label] += 1
         if pred == label:
             class_correct[label] += 1
 
     per_class = {}
-    for i in range(15):
+    for i in range(num_classes):
         if class_total[i] > 0:
             per_class[CLASS_NAMES[i]] = {
                 'accuracy': 100. * class_correct[i] / class_total[i],
                 'correct': class_correct[i], 'total': class_total[i]
             }
 
-    confusion = np.zeros((15, 15), dtype=int)
+    confusion = np.zeros((num_classes, num_classes), dtype=int)
     for pred, label in zip(all_preds, all_labels):
         confusion[label][pred] += 1
 
@@ -196,7 +208,7 @@ def evaluate(model, test_loader, device='cuda'):
     print("\nWorst classes:")
     for name, s in sorted(per_class.items(), key=lambda x: x[1]['accuracy'])[:5]:
         cid = CLASS_NAMES.index(name)
-        conf = [(CLASS_NAMES[j], confusion[cid][j]) for j in range(15) if j != cid and confusion[cid][j] > 0]
+        conf = [(CLASS_NAMES[j], confusion[cid][j]) for j in range(num_classes) if j != cid and confusion[cid][j] > 0]
         conf.sort(key=lambda x: -x[1])
         print(f"  {name}: {s['accuracy']:.2f}% -> {', '.join([f'{c[0]}({c[1]})' for c in conf[:3]])}")
 
@@ -205,7 +217,8 @@ def evaluate(model, test_loader, device='cuda'):
 
 def main():
     print("=" * 50)
-    print("Apple Pencil Stroke Classifier")
+    print("Apple Pencil Stroke Classifier (14 classes)")
+    print("(excluded barline-single)")
     print("=" * 50)
 
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -222,7 +235,7 @@ def main():
     val_loader = DataLoader(val_set, batch_size=32, collate_fn=collate_fn)
     test_loader = DataLoader(test_set, batch_size=32, collate_fn=collate_fn)
 
-    model = StrokeLSTM(input_size=4, hidden_size=128, num_layers=2, num_classes=15, dropout=0.3)
+    model = StrokeLSTM(input_size=4, hidden_size=128, num_layers=2, num_classes=14, dropout=0.3)
     params = sum(p.numel() for p in model.parameters())
     print(f"Parameters: {params:,}")
 
@@ -233,7 +246,14 @@ def main():
 
     model.load_state_dict(torch.load('pencil_best.pt'))
     results = evaluate(model, test_loader, device)
-    results.update({'val_accuracy': best_acc, 'best_epoch': best_epoch, 'parameters': params})
+    results.update({
+        'val_accuracy': best_acc,
+        'best_epoch': best_epoch,
+        'parameters': params,
+        'num_classes': 14,
+        'excluded': ['barline-single'],
+        'class_names': CLASS_NAMES
+    })
 
     with open('pencil_results.json', 'w') as f:
         json.dump(results, f, indent=2)
