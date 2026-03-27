@@ -53,9 +53,9 @@ LABEL_TO_COMPONENTS = {
     'rest-quarter':      [(0, 'rest_quarter')],
     'rest-eighth':       [(0, 'rest_eighth')],
     'treble-clef':       [(0, 'clef')],
-    'sharp':             [(0, 'sharp')],
-    'flat':              [(0, 'flat')],
-    'natural':           [(0, 'natural')],
+    'sharp':             [('all', 'sharp')],      # 合并所有笔画
+    'flat':              [('all', 'flat')],       # 合并所有笔画
+    'natural':           [('all', 'natural')],    # 合并所有笔画
     'dot':               [(0, 'dot')],
 }
 
@@ -190,17 +190,25 @@ def extract_components(data_path='collected/iPad.jsonl'):
             mapping = LABEL_TO_COMPONENTS[label]
 
             for stroke_idx, component_name in mapping:
-                if stroke_idx >= len(strokes):
-                    continue
-
-                stroke = strokes[stroke_idx]
-
-                # 转换为 [x, y, eos] 格式
-                points = []
-                for i, pt in enumerate(stroke):
-                    x, y = pt[0], pt[1]
-                    eos = 1.0 if i == len(stroke) - 1 else 0.0
-                    points.append([x, y, eos])
+                # 'all' 表示合并所有笔画
+                if stroke_idx == 'all':
+                    # 合并所有笔画
+                    points = []
+                    for stroke in strokes:
+                        for i, pt in enumerate(stroke):
+                            x, y = pt[0], pt[1]
+                            eos = 1.0 if i == len(stroke) - 1 else 0.0
+                            points.append([x, y, eos])
+                else:
+                    # 单独一笔
+                    if stroke_idx >= len(strokes):
+                        continue
+                    stroke = strokes[stroke_idx]
+                    points = []
+                    for i, pt in enumerate(stroke):
+                        x, y = pt[0], pt[1]
+                        eos = 1.0 if i == len(stroke) - 1 else 0.0
+                        points.append([x, y, eos])
 
                 if len(points) < 3:  # 太短的笔画跳过
                     continue

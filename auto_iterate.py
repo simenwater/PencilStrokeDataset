@@ -28,9 +28,9 @@ LABEL_TO_COMPONENTS = {
     'rest-quarter':      [(0, 'rest_quarter')],
     'rest-eighth':       [(0, 'rest_eighth')],
     'treble-clef':       [(0, 'clef')],
-    'sharp':             [(0, 'sharp')],
-    'flat':              [(0, 'flat')],
-    'natural':           [(0, 'natural')],
+    'sharp':             [('all', 'sharp')],      # 合并所有笔画
+    'flat':              [('all', 'flat')],       # 合并所有笔画
+    'natural':           [('all', 'natural')],    # 合并所有笔画
     'dot':               [(0, 'dot')],
 }
 
@@ -107,10 +107,18 @@ def extract_components(data_path='collected/iPad.jsonl'):
             if label not in LABEL_TO_COMPONENTS:
                 continue
             for stroke_idx, component_name in LABEL_TO_COMPONENTS[label]:
-                if stroke_idx >= len(strokes):
-                    continue
-                stroke = strokes[stroke_idx]
-                points = [[pt[0], pt[1], 1.0 if i == len(stroke)-1 else 0.0] for i, pt in enumerate(stroke)]
+                # 'all' 表示合并所有笔画
+                if stroke_idx == 'all':
+                    points = []
+                    for stroke in strokes:
+                        for i, pt in enumerate(stroke):
+                            eos = 1.0 if i == len(stroke) - 1 else 0.0
+                            points.append([pt[0], pt[1], eos])
+                else:
+                    if stroke_idx >= len(strokes):
+                        continue
+                    stroke = strokes[stroke_idx]
+                    points = [[pt[0], pt[1], 1.0 if i == len(stroke)-1 else 0.0] for i, pt in enumerate(stroke)]
                 if len(points) >= 3:
                     components.append((points, class_to_idx[component_name]))
     return components
