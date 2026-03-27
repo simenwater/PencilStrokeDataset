@@ -13,7 +13,8 @@ INPUT_DIM = 3
 
 COMPONENT_CLASSES = [
     'notehead_filled', 'notehead_hollow', 'stem', 'flag',
-    'dot', 'rest', 'clef', 'accidental',
+    'dot', 'rest_quarter', 'rest_eighth', 'clef',
+    'sharp', 'flat', 'natural',
 ]
 
 LABEL_TO_COMPONENTS = {
@@ -24,12 +25,12 @@ LABEL_TO_COMPONENTS = {
     'half-note-up':      [(0, 'notehead_hollow'), (1, 'stem')],
     'half-note-down':    [(0, 'notehead_hollow'), (1, 'stem')],
     'whole-note':        [(0, 'notehead_hollow')],
-    'rest-quarter':      [(0, 'rest')],
-    'rest-eighth':       [(0, 'rest')],
+    'rest-quarter':      [(0, 'rest_quarter')],
+    'rest-eighth':       [(0, 'rest_eighth')],
     'treble-clef':       [(0, 'clef')],
-    'sharp':             [(0, 'accidental')],
-    'flat':              [(0, 'accidental')],
-    'natural':           [(0, 'accidental')],
+    'sharp':             [(0, 'sharp')],
+    'flat':              [(0, 'flat')],
+    'natural':           [(0, 'natural')],
     'dot':               [(0, 'dot')],
 }
 
@@ -136,7 +137,7 @@ def train_config(config, train_samples, val_samples, test_samples, device):
 
     model = ComponentRNN(
         input_size=INPUT_DIM, hidden_size=config['hidden'], num_layers=config['layers'],
-        num_classes=8, dropout=config['dropout']
+        num_classes=len(COMPONENT_CLASSES), dropout=config['dropout']
     ).to(device)
 
     optimizer = torch.optim.AdamW(model.parameters(), lr=config['lr'], weight_decay=0.01)

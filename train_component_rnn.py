@@ -1,6 +1,6 @@
 """
 train_component_rnn.py
-组件分类器 - 10类基础形状
+组件分类器 - 11类基础形状
 修复: 不用 pack_padded_sequence，固定512长度+重复填充
 
 组件类别:
@@ -9,11 +9,12 @@ train_component_rnn.py
 2: stem (符干)
 3: flag (旗帜)
 4: dot (附点)
-5: rest (休止符)
-6: clef (谱号)
-7: sharp (升号)
-8: flat (降号)
-9: natural (还原号)
+5: rest_quarter (四分休止符)
+6: rest_eighth (八分休止符)
+7: clef (谱号)
+8: sharp (升号)
+9: flat (降号)
+10: natural (还原号)
 """
 
 import torch
@@ -24,18 +25,19 @@ import json
 import time
 import math
 
-# 10 类组件 (升降还原号分开)
+# 11 类组件 (升降还原号分开，休止符分开)
 COMPONENT_CLASSES = [
     'notehead_filled',  # 0: 实心符头 (四分/八分/十六分音符)
     'notehead_hollow',  # 1: 空心符头 (二分/全音符)
     'stem',             # 2: 符干
     'flag',             # 3: 旗帜
     'dot',              # 4: 附点
-    'rest',             # 5: 休止符
-    'clef',             # 6: 谱号
-    'sharp',            # 7: 升号 ♯
-    'flat',             # 8: 降号 ♭
-    'natural',          # 9: 还原号 ♮
+    'rest_quarter',     # 5: 四分休止符
+    'rest_eighth',      # 6: 八分休止符
+    'clef',             # 7: 谱号
+    'sharp',            # 8: 升号 ♯
+    'flat',             # 9: 降号 ♭
+    'natural',          # 10: 还原号 ♮
 ]
 
 # 从原始标签拆分组件的映射
@@ -48,8 +50,8 @@ LABEL_TO_COMPONENTS = {
     'half-note-up':      [(0, 'notehead_hollow'), (1, 'stem')],
     'half-note-down':    [(0, 'notehead_hollow'), (1, 'stem')],
     'whole-note':        [(0, 'notehead_hollow')],
-    'rest-quarter':      [(0, 'rest')],
-    'rest-eighth':       [(0, 'rest')],
+    'rest-quarter':      [(0, 'rest_quarter')],
+    'rest-eighth':       [(0, 'rest_eighth')],
     'treble-clef':       [(0, 'clef')],
     'sharp':             [(0, 'sharp')],
     'flat':              [(0, 'flat')],
@@ -329,8 +331,8 @@ def evaluate(model, test_loader, device='cuda'):
 
 def main():
     print("=" * 60)
-    print("组件分类器 RNN (10类)")
-    print("升降还原号分开识别")
+    print("组件分类器 RNN (11类)")
+    print("升降还原号分开，休止符分开")
     print("修复: 固定512长度 + 重复填充 (跟Swift一致)")
     print("=" * 60)
 
